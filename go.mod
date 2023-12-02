@@ -1,3 +1,3 @@
-module hellboy1975/aoc2023-base
+module aoc2023
 
 go 1.21.4
