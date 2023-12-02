@@ -8,23 +8,18 @@ import (
 	"os"
 )
 
-const testDataFile = "day_%d_%d%s.txt"
+const testDataFile = "data/day_%d_%d.txt"
 
-func GetTestDataFile(test bool, day, part int) string {
-	var replace string
+// gets the data file for the requested day and part
+func GetDayDataFile(day, part int) string {
+	file := fmt.Sprintf(testDataFile, day, part)
+	fmt.Println("  Data file: " + file)
 
-	if test {
-		replace = "_test"
-	}
-
-	testDataFile := fmt.Sprintf(testDataFile, day, part, replace)
-	fmt.Println("  Test data file: " + testDataFile)
-
-	return testDataFile
+	return file
 }
 
 // Read a whole file into the memory and store it as array of lines
-func readLines(path string) (lines []string, err error) {
+func ReadLines(path string) (lines []string, err error) {
 	var (
 		file   *os.File
 		part   []byte
