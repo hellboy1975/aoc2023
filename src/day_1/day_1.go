@@ -1,7 +1,6 @@
 package day_1
 
 import (
-	"aoc2023/src/base"
 	"fmt"
 )
 
@@ -19,13 +18,19 @@ import (
 // 	return reg.ReplaceAllString(x, "")
 // }
 
+// Extracts the Calibration value from a raw string provided by elves
+func extractCalibrationValue(raw string) int {
+	return 12
+}
+
+// Day 1, Part 1 of the AoC2023 challenge
 func Part1() {
 	fmt.Println("Day 1, Part 1: Trebuchet?!")
 
-	testData := base.GetTestDataFile()
-
 }
 
+// Day 1, Part 2 of the AoC2023 challenge
 func Part2() {
 	fmt.Println("Day 1, Part 2: Trebuchet?!")
+
 }
