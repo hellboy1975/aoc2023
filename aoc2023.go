@@ -18,7 +18,7 @@ func main() {
 		if *partPtr == 1 {
 			day_1.Part1()
 		} else {
-			day_1.Part2()
+			day_1.Part2() // pass an argument to reduce code reuse
 		}
 
 	}
