@@ -56,7 +56,7 @@ I came up with a second approach that used a fancy regex using a look ahead:
 ```
 
 I'm pretty confident this would have worked, however the various regex libraries available for Go don't support this syntax.  As I'm keen to move on to Day 2,
-I have decided refactoring this (again) isn't worth the effort)
+I have decided refactoring this (again) isn't worth the effort.
 
 ## References
 
