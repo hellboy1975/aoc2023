@@ -1,7 +1,8 @@
 package main
 
 import (
-	"aoc2023/src/day_1"
+	"aoc2023/src/day1"
+	"aoc2023/src/day2"
 	"flag"
 	"fmt"
 )
@@ -16,10 +17,15 @@ func main() {
 
 	if *dayPtr == 1 {
 		if *partPtr == 1 {
-			day_1.Part1()
+			day1.Part1()
 		} else {
-			day_1.Part2() // pass an argument to reduce code reuse
+			day1.Part2() // pass an argument to reduce code reuse
 		}
-
+	} else if *dayPtr == 2 {
+		if *partPtr == 1 {
+			day2.Part1()
+		} else {
+			day2.Part2() // pass an argument to reduce code reuse
+		}
 	}
 }
