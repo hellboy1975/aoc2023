@@ -12,6 +12,7 @@ func TestGetGameId(t *testing.T) {
 		Want        int
 	}{
 		{"'Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green' extracts ID of 1", "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green", 1},
+		{"'Game 612: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green' extracts ID of 1", "Game 612: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green", 612},
 	}
 
 	for _, test := range cases {
