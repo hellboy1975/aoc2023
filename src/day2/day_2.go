@@ -87,7 +87,7 @@ func GetColourMax(s string) (blue int, red int, green int) {
 	return blue, red, green
 }
 
-// Day 1, Part 1 (and now Part 2) of the AoC2023 challenge
+// Day 2, Part 1 of the AoC2023 challenge
 func Part1() {
 	fmt.Println("Day 2, Part 1: Cube Conundrum")
 
