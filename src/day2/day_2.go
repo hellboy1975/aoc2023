@@ -57,30 +57,29 @@ func IsGamePossible(s string) bool {
 
 }
 
-// takes some elvish raw data, and pulls the ID out of it.
-// sample: Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
-func GetColourCount(s string) (blue int, red int, green int) {
+// Works out the highest value of each colour in a given round
+func GetColourMax(s string) (blue int, red int, green int) {
 
 	colours := strings.Split(s, ":")[1]
 	rounds := strings.Split(colours, ";")
 
 	for _, r := range rounds {
 		sets := strings.Split(r, ",")
-		for _, s := range sets {
+		for i, s := range sets {
 			s = strings.TrimSpace(s)
-			// fmt.Println("set:", s)
+			fmt.Println("set:", s)
 			colour := strings.Split(s, " ")[1]
 			count, _ := strconv.Atoi(strings.Split(s, " ")[0])
 
-			// fmt.Println(i, "colour", colour)
-			// fmt.Println(i, "count", count)
+			fmt.Println(i, "colour", colour)
+			fmt.Println(i, "count", count)
 
-			if colour == "blue" {
-				blue += count
-			} else if colour == "red" {
-				red += count
-			} else if colour == "green" {
-				green += count
+			if colour == "blue" && count > blue {
+				blue = count
+			} else if colour == "red" && count > red {
+				red = count
+			} else if colour == "green" && count > green {
+				green = count
 			}
 		}
 	}
@@ -115,4 +114,22 @@ func Part1() {
 
 func Part2() {
 	fmt.Println("Day 2, Part 2: Cube Conundrum")
+
+	file := base.GetDayDataFile(2, 1)
+
+	lines, err := base.ReadLines(file)
+	if err != nil {
+		panic(err)
+	}
+
+	var sum int
+	for _, s := range lines {
+
+		blue, red, green := GetColourMax(s)
+
+		// will one of these numbers ever be zero?  Didn't turn out to be a problem...
+		sum += blue * red * green
+	}
+
+	fmt.Println("Sum of possible games:", sum)
 }
