@@ -58,6 +58,14 @@ I came up with a second approach that used a fancy regex using a look ahead:
 I'm pretty confident this would have worked, however the various regex libraries available for Go don't support this syntax.  As I'm keen to move on to Day 2,
 I have decided refactoring this (again) isn't worth the effort.
 
+### Day 2
+
+Mostly just an exercise in parsing.  In a language I'd be more comfortable with I'd have done this a little more quickly.  Spent more time working on the tests than actual solutions.
+
+With Part 2 I was lucky that I'd developed a solution that was complimentary to the answer, rather than having to do a reworking.
+
+### Day 3
+
 ## References
 
 Below is a list of sites/resources that have been useful in these challenges:
