@@ -11,7 +11,7 @@ const CharNum = 1
 const CharSymbol = 2
 const CharBlank = 3
 
-const DataExtent = 140 // 140 columns/rows in the data provided
+const DataExtent = 139 // 140 columns/rows in the data provided
 
 const NumRegex = "([0-9])\\w+"
 
@@ -23,11 +23,11 @@ type coord struct {
 // returns 1 for number, 2 for symbol and 3 for .
 func CharType(c rune) int {
 	if c == '.' {
-		return CharNum
+		return CharBlank
 	} else if unicode.IsNumber(c) {
-		return CharSymbol
+		return CharNum
 	}
-	return CharBlank
+	return CharSymbol
 }
 
 func LineNumberChunks(s string) [][]int {
@@ -42,14 +42,25 @@ func LineNumberChunks(s string) [][]int {
 func Symbols(lines []string) [][]bool {
 
 	var symbols [][]bool
+	// symbols := make([][]bool, 139)
+
+	fmt.Println("Lines:", len(lines))
 	for y, line := range lines {
+		fmt.Println("Cells:", len(line))
+		fmt.Println(line)
+		sline := make([]bool, 140)
 		for x, cell := range line {
+			// fmt.Println(x, y, cell)
 			if CharType(rune(cell)) == CharSymbol {
-				symbols[x][y] = true
+				// fmt.Println("true")
+				sline[x] = true
 			} else {
-				symbols[x][y] = false
+				// fmt.Println("false")
+				sline[x] = false
 			}
 		}
+		fmt.Println("sline", sline)
+		symbols[y] = sline
 	}
 	fmt.Println()
 	return symbols
@@ -57,8 +68,8 @@ func Symbols(lines []string) [][]bool {
 
 func Ycoord(chunk []int, line int) (ycoord coord) {
 	// ycoord will contain the bottom-right corner of the range "box"
-	if chunk[1] >= DataExtent-1 {
-		ycoord.x = DataExtent - 1
+	if chunk[1] >= DataExtent {
+		ycoord.x = DataExtent
 	} else {
 		ycoord.x = chunk[1] + 1
 	}
@@ -76,8 +87,8 @@ func Ycoord(chunk []int, line int) (ycoord coord) {
 func Xcoord(chunk []int, line int) (xcoord coord) {
 	// xcoord will contin the top-left corner of the range "box"
 	// if the line is the first one (1) the should us that instead of -1
-	if line == 1 {
-		xcoord.y = 1
+	if line == 0 {
+		xcoord.y = 0
 	} else {
 		xcoord.y = line - 1
 	}
@@ -115,13 +126,17 @@ func Part1() {
 		panic(err)
 	}
 
-	// symbols := Symbols(lines)
+	symbols := Symbols(lines)
+	fmt.Println(symbols)
 
 	for x, line := range lines {
 		chunks := LineNumberChunks(line)
 
 		for c, chunk := range chunks {
 			fmt.Println(x, c, chunk)
+			xcoord, ycoord := CalcRange(chunk, x)
+			fmt.Println(xcoord)
+			fmt.Println(ycoord)
 		}
 	}
 }
