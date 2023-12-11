@@ -11,7 +11,14 @@ const CharNum = 1
 const CharSymbol = 2
 const CharBlank = 3
 
+const DataExtent = 140 // 140 columns/rows in the data provided
+
 const NumRegex = "([0-9])\\w+"
+
+type coord struct {
+	x int
+	y int
+}
 
 // returns 1 for number, 2 for symbol and 3 for .
 func CharType(c rune) int {
@@ -48,6 +55,43 @@ func Symbols(lines []string) [][]bool {
 	return symbols
 }
 
+func Ycoord(chunk []int, line int) (ycoord coord) {
+	// ycoord will contain the bottom-right corner of the range "box"
+	if chunk[1] >= DataExtent-1 {
+		ycoord.x = DataExtent - 1
+	} else {
+		ycoord.x = chunk[1] + 1
+	}
+
+	// if we're on the final line then we won't add one
+	if line >= DataExtent {
+		ycoord.y = DataExtent
+	} else {
+		ycoord.y = line + 1
+	}
+
+	return ycoord
+}
+
+func Xcoord(chunk []int, line int) (xcoord coord) {
+	// xcoord will contin the top-left corner of the range "box"
+	// if the line is the first one (1) the should us that instead of -1
+	if line == 1 {
+		xcoord.y = 1
+	} else {
+		xcoord.y = line - 1
+	}
+
+	// if the first array item in the chunk is 0 then the xcoord should also be 0
+	if chunk[0] == 0 {
+		xcoord.x = 0
+	} else {
+		xcoord.x = chunk[0] - 1
+	}
+
+	return xcoord
+}
+
 // Takes a chunk (two x coords) and a line (the y coord)
 /*
 
@@ -55,23 +99,9 @@ func Symbols(lines []string) [][]bool {
 ...345....
 ..........
 */
-func CalcRange(chunk []int, line int) (xcoord, ycoord []int) {
+func CalcRange(chunk []int, line int) (xcoord, ycoord coord) {
 
-	// if the line is the first one (0) the should us that instead of -1
-	if line == 0 {
-		xcoord = append(xcoord, 0)
-	} else {
-		xcoord = append(xcoord, line-1)
-	}
-
-	// if the first array item in the chunk is 0 then the xcoord should also be 0
-	if chunk[0] == 0 {
-		xcoord = append(xcoord, 0)
-	} else {
-		xcoord = append(xcoord, chunk[0]-1)
-	}
-
-	return xcoord, ycoord
+	return Xcoord(chunk, line), Ycoord(chunk, line)
 }
 
 // Day 3, Part 1 of the AoC2023 challenge
