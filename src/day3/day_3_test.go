@@ -144,13 +144,13 @@ func TestYcoordLastCol(t *testing.T) {
 func TestTwoDigitCoord(t *testing.T) {
 	var wantx, wanty coord
 	// TODO: work out what these nums are
-	wantx.x = 139
-	wantx.y = 139
-	wanty.x = 139
-	wanty.y = 139
+	wantx.x = 46
+	wantx.y = 2
+	wanty.x = 50
+	wanty.y = 4
 	chunk := []int{47, 50}
 
-	line := DataExtent
+	line := 3
 	gotx := Xcoord(chunk, line)
 	goty := Ycoord(chunk, line)
 
@@ -207,6 +207,22 @@ func TestIsChunkNextToSymbolFalse(t *testing.T) {
 	got := IsChunkNextToSymbol(x, y)
 
 	want := false
+	if got != want {
+		t.Errorf("got %t, want %t", got, want)
+	}
+}
+
+func TestIsChunkNextToSymbolDoubleDigit(t *testing.T) {
+	var x, y coord
+
+	x.x = 0
+	x.y = 1
+	y.x = 4
+	y.y = 2
+
+	got := IsChunkNextToSymbol(x, y)
+
+	want := true
 	if got != want {
 		t.Errorf("got %t, want %t", got, want)
 	}
