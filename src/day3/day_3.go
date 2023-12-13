@@ -4,6 +4,8 @@ import (
 	"aoc2023/src/base"
 	"fmt"
 	"regexp"
+	"slices"
+	"strconv"
 	"unicode"
 )
 
@@ -13,12 +15,15 @@ const CharBlank = 3
 
 const DataExtent = 139 // 140 columns/rows in the data provided
 
-const NumRegex = "([0-9])\\w+"
+// const NumRegex = "([0-9])\\w+"
+const NumRegex = "\\d+"
 
 type coord struct {
 	x int
 	y int
 }
+
+var symbols [][]bool
 
 // returns 1 for number, 2 for symbol and 3 for .
 func CharType(c rune) int {
@@ -40,29 +45,19 @@ func LineNumberChunks(s string) [][]int {
 
 // Creates a 2D array of boolean values indicating if a x,y coordinate is a symbol
 func Symbols(lines []string) [][]bool {
+	symbols := make([][]bool, 140)
 
-	var symbols [][]bool
-	// symbols := make([][]bool, 139)
-
-	fmt.Println("Lines:", len(lines))
 	for y, line := range lines {
-		fmt.Println("Cells:", len(line))
-		fmt.Println(line)
 		sline := make([]bool, 140)
 		for x, cell := range line {
-			// fmt.Println(x, y, cell)
 			if CharType(rune(cell)) == CharSymbol {
-				// fmt.Println("true")
 				sline[x] = true
 			} else {
-				// fmt.Println("false")
 				sline[x] = false
 			}
 		}
-		fmt.Println("sline", sline)
 		symbols[y] = sline
 	}
-	fmt.Println()
 	return symbols
 }
 
@@ -71,7 +66,7 @@ func Ycoord(chunk []int, line int) (ycoord coord) {
 	if chunk[1] >= DataExtent {
 		ycoord.x = DataExtent
 	} else {
-		ycoord.x = chunk[1] + 1
+		ycoord.x = chunk[1]
 	}
 
 	// if we're on the final line then we won't add one
@@ -105,7 +100,6 @@ func Xcoord(chunk []int, line int) (xcoord coord) {
 
 // Takes a chunk (two x coords) and a line (the y coord)
 /*
-
 ..........
 ...345....
 ..........
@@ -113,6 +107,37 @@ func Xcoord(chunk []int, line int) (xcoord coord) {
 func CalcRange(chunk []int, line int) (xcoord, ycoord coord) {
 
 	return Xcoord(chunk, line), Ycoord(chunk, line)
+}
+
+// checks to see if the chunk has a symbol with it's box as defined by x & y
+func IsChunkNextToSymbol(x coord, y coord) bool {
+
+	// iterate each of the rows between the x & y y coordinates
+	for i := x.y; i <= y.y; i++ {
+		s := symbols[i][x.x:y.x]
+		if slices.Contains(s, true) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// Visualises the symbols
+func PrintSymbols() {
+	fmt.Println("Symbols grid:")
+	for _, line := range symbols {
+		fmt.Print("|")
+		for _, s := range line {
+			if s {
+				fmt.Print("*")
+			} else {
+				fmt.Print(".")
+			}
+
+		}
+		fmt.Println("|")
+	}
 }
 
 // Day 3, Part 1 of the AoC2023 challenge
@@ -126,19 +151,36 @@ func Part1() {
 		panic(err)
 	}
 
-	symbols := Symbols(lines)
-	fmt.Println(symbols)
+	symbols = Symbols(lines)
+
+	PrintSymbols()
+
+	var sum, count, linecount int
 
 	for x, line := range lines {
+		fmt.Println("line:", x)
+		linecount++
 		chunks := LineNumberChunks(line)
 
-		for c, chunk := range chunks {
-			fmt.Println(x, c, chunk)
+		for _, chunk := range chunks {
+			count++
+			// fmt.Println("line", l, chunk)
 			xcoord, ycoord := CalcRange(chunk, x)
-			fmt.Println(xcoord)
-			fmt.Println(ycoord)
+			// fmt.Println(xcoord)
+			// fmt.Println(ycoord)
+			if IsChunkNextToSymbol(xcoord, ycoord) {
+
+				fmt.Println(count, ": Chunk", chunk, "is adjacent.  Line:", x)
+				add, _ := strconv.Atoi(string(line[chunk[0]:chunk[1]]))
+				sum += add
+			} else {
+				fmt.Println(count, ": Chunk", chunk, "is not adjacent.  Line:", x)
+			}
+
 		}
 	}
+	fmt.Println("Lines processed", linecount)
+	fmt.Println("Sum of adjacent chunks", sum)
 }
 
 // Day 3, Part 2 of the AoC2023 challenge

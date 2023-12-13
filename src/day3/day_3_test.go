@@ -16,7 +16,7 @@ func TestXcoord(t *testing.T) {
 	var want coord
 	want.x = 3
 	want.y = 2
-	chunk := []int{4, 6}
+	chunk := []int{4, 7}
 	line := 3
 	got := Xcoord(chunk, line)
 
@@ -32,7 +32,7 @@ func TestXcoordLineOne(t *testing.T) {
 	var want coord
 	want.x = 3
 	want.y = 0
-	chunk := []int{4, 6}
+	chunk := []int{4, 7}
 	line := 0
 	got := Xcoord(chunk, line)
 
@@ -48,7 +48,7 @@ func TestXcoordFinalLine(t *testing.T) {
 	var want coord
 	want.x = 3
 	want.y = 138
-	chunk := []int{4, 6}
+	chunk := []int{4, 7}
 	line := DataExtent
 	got := Xcoord(chunk, line)
 
@@ -64,7 +64,7 @@ func TestXcoordFirstCol(t *testing.T) {
 	var want coord
 	want.x = 0
 	want.y = 138
-	chunk := []int{0, 2}
+	chunk := []int{0, 3}
 	line := DataExtent
 	got := Xcoord(chunk, line)
 
@@ -80,7 +80,7 @@ func TestYcoord(t *testing.T) {
 	var want coord
 	want.x = 7
 	want.y = 4
-	chunk := []int{4, 6}
+	chunk := []int{4, 7}
 	line := 3
 	got := Ycoord(chunk, line)
 
@@ -96,7 +96,7 @@ func TestYcoordFirst(t *testing.T) {
 	var want coord
 	want.x = 3
 	want.y = 4
-	chunk := []int{0, 2}
+	chunk := []int{0, 3}
 	line := 3
 	got := Ycoord(chunk, line)
 
@@ -112,7 +112,7 @@ func TestYcoordLast(t *testing.T) {
 	var want coord
 	want.x = 139
 	want.y = 4
-	chunk := []int{137, 139}
+	chunk := []int{137, 140}
 	line := 3
 	got := Ycoord(chunk, line)
 
@@ -128,6 +128,7 @@ func TestYcoordLastCol(t *testing.T) {
 	var want coord
 	want.x = 139
 	want.y = 139
+
 	chunk := []int{137, 139}
 	line := DataExtent
 	got := Ycoord(chunk, line)
@@ -137,6 +138,33 @@ func TestYcoordLastCol(t *testing.T) {
 	}
 	if got.y != want.y {
 		t.Errorf("Y Coordinate got %d, want %d", got.y, want.y)
+	}
+}
+
+func TestTwoDigitCoord(t *testing.T) {
+	var wantx, wanty coord
+	// TODO: work out what these nums are
+	wantx.x = 139
+	wantx.y = 139
+	wanty.x = 139
+	wanty.y = 139
+	chunk := []int{47, 50}
+
+	line := DataExtent
+	gotx := Xcoord(chunk, line)
+	goty := Ycoord(chunk, line)
+
+	if gotx.x != wantx.x {
+		t.Errorf("X Coordinate x got %d, want %d", gotx.x, wantx.x)
+	}
+	if gotx.y != wantx.y {
+		t.Errorf("X Coordinate y got %d, want %d", gotx.y, wantx.y)
+	}
+	if goty.x != wanty.x {
+		t.Errorf("Y Coordinate x got %d, want %d", goty.x, wanty.x)
+	}
+	if goty.y != wanty.y {
+		t.Errorf("Y Coordinate y got %d, want %d", goty.y, wanty.y)
 	}
 }
 
