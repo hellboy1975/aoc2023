@@ -7,6 +7,8 @@ My approach for this year:
 * Learn how to write in Go
 * Use TDD
 
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/hellboy1975/aoc2023/.github%2Fworkflows%2Fgo.yml)
+
 ## Usage
 
 Clone this repo to your file system directory of choice, and make sure you have Go 1.21.4 installed
@@ -57,6 +59,17 @@ I came up with a second approach that used a fancy regex using a look ahead:
 
 I'm pretty confident this would have worked, however the various regex libraries available for Go don't support this syntax.  As I'm keen to move on to Day 2,
 I have decided refactoring this (again) isn't worth the effort.
+
+### Day 2
+
+Mostly just an exercise in parsing.  In a language I'd be more comfortable with I'd have done this a little more quickly.  Spent more time working on the tests than actual solutions.
+
+With Part 2 I was lucky that I'd developed a solution that was complimentary to the answer, rather than having to do a reworking.
+
+### Day 3
+
+For Day 2 the Part 1 solution wasn't especially hard to design, but took me a whil writing the appropriate code in Go. 
+I spent more time with test writing this time around than in the other days.
 
 ## References
 
