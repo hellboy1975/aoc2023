@@ -1,8 +1,16 @@
 package day3
 
 import (
+	"reflect"
 	"testing"
 )
+
+func init() {
+	// need to setup the symbols variable
+	symbols = append(symbols, []bool{false, false, false, false, false, false, false, false})
+	symbols = append(symbols, []bool{false, false, false, true, false, false, false, false})
+	symbols = append(symbols, []bool{false, false, false, false, false, false, false, false})
+}
 
 func TestXcoord(t *testing.T) {
 	var want coord
@@ -141,5 +149,47 @@ func TestCharType(t *testing.T) {
 		if got != want[i] {
 			t.Errorf("CharType %c got %d, want %d", r, got, want[i])
 		}
+	}
+}
+
+func TestIsChunkNextToSymbolTrue(t *testing.T) {
+	var x, y coord
+
+	x.x = 3
+	x.y = 0
+	y.x = 5
+	y.y = 2
+
+	got := IsChunkNextToSymbol(x, y)
+
+	want := true
+	if got != want {
+		t.Errorf("got %t, want %t", got, want)
+	}
+}
+
+func TestIsChunkNextToSymbolFalse(t *testing.T) {
+	var x, y coord
+
+	x.x = 5
+	x.y = 0
+	y.x = 7
+	y.y = 2
+
+	got := IsChunkNextToSymbol(x, y)
+
+	want := false
+	if got != want {
+		t.Errorf("got %t, want %t", got, want)
+	}
+}
+
+func TestLineNumberChunks(t *testing.T) {
+	line := "......456..789..."
+	want := [][]int{{6, 9}, {11, 14}}
+	got := LineNumberChunks(line)
+
+	if reflect.DeepEqual(got, want) != true {
+		t.Errorf("got %v, want %v", got, want)
 	}
 }
