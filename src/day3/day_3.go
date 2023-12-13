@@ -111,12 +111,10 @@ func CalcRange(chunk []int, line int) (xcoord, ycoord coord) {
 
 // checks to see if the chunk has a symbol with it's box as defined by x & y
 func IsChunkNextToSymbol(x coord, y coord) bool {
-	fmt.Println("IsChunkNextToSymbol", x.x, x.y, y.x, y.y)
-	fmt.Println("symbols", len(symbols))
 	// iterate each of the rows between the x & y y coordinates
 	for i := x.y; i <= y.y; i++ {
-		fmt.Println("line:", i)
-		s := symbols[i][x.x:y.x]
+
+		s := symbols[i][x.x : y.x+1]
 		if slices.Contains(s, true) {
 			return true
 		}
@@ -130,10 +128,9 @@ func PrintSymbols() {
 	fmt.Println("Symbols grid:")
 	for _, line := range symbols {
 		fmt.Print("|")
-		for pos, s := range line {
+		for _, s := range line {
 			if s {
 				fmt.Print("*")
-				fmt.Print(pos)
 			} else {
 				fmt.Print(".")
 			}
@@ -166,23 +163,10 @@ func Part1() {
 
 		for _, chunk := range chunks {
 			count++
-			// fmt.Println("line", l, chunk)
 			xcoord, ycoord := CalcRange(chunk, x)
-			// fmt.Println(xcoord)
-			// fmt.Println(ycoord)
 			if IsChunkNextToSymbol(xcoord, ycoord) {
-
-				if x == 139 {
-					fmt.Println(xcoord, ycoord)
-					fmt.Println(count, ": Chunk", chunk, "is adjacent.  Line:", x)
-				}
 				add, _ := strconv.Atoi(string(line[chunk[0]:chunk[1]]))
 				sum += add
-			} else {
-				if x == 139 {
-					fmt.Println(xcoord, ycoord)
-					fmt.Println(count, ": Chunk", chunk, "is not adjacent.  Line:", x)
-				}
 			}
 
 		}
