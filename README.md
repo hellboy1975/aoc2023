@@ -8,6 +8,8 @@ My approach for this year:
 * Use TDD
 
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/hellboy1975/aoc2023/.github%2Fworkflows%2Fgo.yml)
+![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/hellboy1975/aoc2023)
+
 
 ## Usage
 
