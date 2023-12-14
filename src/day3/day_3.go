@@ -12,10 +12,10 @@ import (
 const CharNum = 1
 const CharSymbol = 2
 const CharBlank = 3
+const CharGear = 4
 
 const DataExtent = 139 // 140 columns/rows in the data provided
 
-// const NumRegex = "([0-9])\\w+"
 const NumRegex = "\\d+"
 
 type coord struct {
@@ -24,10 +24,13 @@ type coord struct {
 }
 
 var symbols [][]bool
+var gears [][]bool
 
 // returns 1 for number, 2 for symbol and 3 for .
 func CharType(c rune) int {
-	if c == '.' {
+	if c == '*' {
+		return CharGear
+	} else if c == '.' {
 		return CharBlank
 	} else if unicode.IsNumber(c) {
 		return CharNum
@@ -50,7 +53,9 @@ func Symbols(lines []string) [][]bool {
 	for y, line := range lines {
 		sline := make([]bool, 140)
 		for x, cell := range line {
-			if CharType(rune(cell)) == CharSymbol {
+			// Gears and other symbols are different
+			celltype := CharType(rune(cell))
+			if celltype == CharSymbol || celltype == CharGear {
 				sline[x] = true
 			} else {
 				sline[x] = false
@@ -59,6 +64,38 @@ func Symbols(lines []string) [][]bool {
 		symbols[y] = sline
 	}
 	return symbols
+}
+
+// Creates a 2D array of boolean values indicating if a x,y coordinate is a symbol
+func Gears(lines []string) [][]bool {
+	symbols := make([][]bool, 140)
+
+	for y, line := range lines {
+		sline := make([]bool, 140)
+		for x, cell := range line {
+			if CharType(rune(cell)) == CharGear {
+				sline[x] = true
+			} else {
+				sline[x] = false
+			}
+		}
+		symbols[y] = sline
+	}
+	return symbols
+}
+
+// iterates over the file, building a 2D array in which each element contains either 0 or the number of the chunk
+func Chunks(lines []string) (data [][]int) {
+	var linecount int
+	for _, line := range lines {
+		linecount++
+		chunks := LineNumberChunks(line)
+
+		for _, chunk := range chunks {
+			fmt.Println(chunk)
+		}
+	}
+	return
 }
 
 func Ycoord(chunk []int, line int) (ycoord coord) {
@@ -124,9 +161,8 @@ func IsChunkNextToSymbol(x coord, y coord) bool {
 }
 
 // Visualises the symbols
-func PrintSymbols() {
-	fmt.Println("Symbols grid:")
-	for _, line := range symbols {
+func PrintGrid(grid [][]bool) {
+	for _, line := range grid {
 		fmt.Print("|")
 		for _, s := range line {
 			if s {
@@ -153,7 +189,7 @@ func Part1() {
 
 	symbols = Symbols(lines)
 
-	PrintSymbols()
+	PrintGrid(symbols)
 
 	var sum, count, linecount int
 
@@ -178,4 +214,19 @@ func Part1() {
 // Day 3, Part 2 of the AoC2023 challenge
 func Part2() {
 	fmt.Println("Day 3, Part 2: Gear Ratios")
+
+	file := base.GetDayDataFile(3, 1)
+
+	lines, err := base.ReadLines(file)
+	if err != nil {
+		panic(err)
+	}
+
+	gears = Gears(lines)
+
+	PrintGrid(gears)
+
+	chunks := Chunks(lines)
+
+	fmt.Println("chunks[0]", chunks[0])
 }
