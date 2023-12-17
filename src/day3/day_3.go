@@ -2,6 +2,7 @@ package day3
 
 import (
 	"aoc2023/src/base"
+	"errors"
 	"fmt"
 	"regexp"
 	"slices"
@@ -84,15 +85,39 @@ func Gears(lines []string) [][]bool {
 	return symbols
 }
 
+// returns the integer value of the chunk located on the passed cell
+func GetChunkValue(cell int, chunks [][]int, line string) (int, error) {
+	for _, chunk := range chunks {
+		if cell >= chunk[0] && cell < chunk[1] {
+			// get the whole number
+			r, _ := strconv.Atoi(line[chunk[0]:chunk[1]])
+			return r, nil
+		}
+	}
+	return -1, errors.New("no chunk match")
+}
+
 // iterates over the file, building a 2D array in which each element contains either 0 or the number of the chunk
 func Chunks(lines []string) (data [][]int) {
 	var linecount int
-	for _, line := range lines {
+
+	for l, line := range lines {
+		fmt.Println(line)
 		linecount++
 		chunks := LineNumberChunks(line)
 
-		for _, chunk := range chunks {
-			fmt.Println(chunk)
+		for x, cell := range line {
+			// fmt.Println(l, x, cell)
+			if unicode.IsDigit(cell) {
+				// if it's a number, then find the matching chunk
+				c, err := GetChunkValue(x, chunks, line)
+				if err != nil {
+					panic(err)
+				}
+				data[l][x] = c
+			} else {
+				data[l][x] = -1
+			}
 		}
 	}
 	return
