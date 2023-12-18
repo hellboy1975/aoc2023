@@ -18,13 +18,13 @@ Clone this repo to your file system directory of choice, and make sure you have 
 Build the project with:
 
 ```
-go build
+go build -o ./bin
 ```
 
 Run a specific day with a command like:
 
 ```
-./aoc2023 -day=1 -part=1
+./bin/aoc2023 -day=1 -part=1
 ```
 
 For limited help:
