@@ -98,11 +98,14 @@ func GetChunkValue(cell int, chunks [][]int, line string) (int, error) {
 }
 
 // iterates over the file, building a 2D array in which each element contains either 0 or the number of the chunk
-func Chunks(lines []string) (data [][]int) {
+func Chunks(lines []string) [][]int {
 	var linecount int
 
+	data := make([][]int, 140)
+
 	for l, line := range lines {
-		fmt.Println(line)
+		// fmt.Println(line)
+		row := make([]int, 140)
 		linecount++
 		chunks := LineNumberChunks(line)
 
@@ -114,13 +117,14 @@ func Chunks(lines []string) (data [][]int) {
 				if err != nil {
 					panic(err)
 				}
-				data[l][x] = c
+				row[x] = c
 			} else {
-				data[l][x] = -1
+				row[x] = -1
 			}
 		}
+		data[l] = row
 	}
-	return
+	return data
 }
 
 func Ycoord(chunk []int, line int) (ycoord coord) {
@@ -201,6 +205,37 @@ func PrintGrid(grid [][]bool) {
 	}
 }
 
+// takes a coordinate, works out how many ratios are around it and returns their product
+func GetRatio(gear coord, chunks [][]int) int {
+	var ratios []int
+	var total int
+
+	for y := gear.y - 1; y <= gear.y+1; y++ {
+		for x := gear.x - 1; x <= gear.x+1; x++ {
+			if chunks[y][x] != -1 {
+				ratios = append(ratios, chunks[y][x])
+			}
+		}
+	}
+	// remove duplicates
+	ratios = base.RemoveDuplicateInt(ratios)
+
+	// if there's only one ratio then we can disregard this
+	if len(ratios) <= 1 {
+		return 0
+	}
+
+	// multiply the remaining values in the array together
+	for _, ratio := range ratios {
+		if total == 0 {
+			total = ratio
+		} else {
+			total *= ratio
+		}
+	}
+	return total
+}
+
 // Day 3, Part 1 of the AoC2023 challenge
 func Part1() {
 	fmt.Println("Day 3, Part 1: Gear Ratios")
@@ -238,6 +273,8 @@ func Part1() {
 
 // Day 3, Part 2 of the AoC2023 challenge
 func Part2() {
+	var linecount, sum, grcount int
+	var gear coord
 	fmt.Println("Day 3, Part 2: Gear Ratios")
 
 	file := base.GetDayDataFile(3, 1)
@@ -247,11 +284,32 @@ func Part2() {
 		panic(err)
 	}
 
+	// a 2d array of booleans which indicate where the gears are
 	gears = Gears(lines)
 
 	PrintGrid(gears)
 
+	// a 2d array of ints which contain either the number of the chunk or -1 (indicating no value or a symbol)
 	chunks := Chunks(lines)
 
-	fmt.Println("chunks[0]", chunks[0])
+	// iterate through the gears, and then get the adjacent chunk values
+	for y, line := range gears {
+		linecount++
+		for x, pos := range line {
+			if pos {
+				gear.x = x
+				gear.y = y
+
+				gr := GetRatio(gear, chunks)
+				if gr > 0 {
+					grcount++
+					sum += gr
+				}
+			}
+		}
+
+	}
+
+	fmt.Println("Gear ratios analysed:", grcount)
+	fmt.Println("Sum of gear ratios:", sum)
 }
