@@ -14,10 +14,8 @@ const max_blue = 14
 func GetGameId(s string) int {
 
 	id := strings.Split(s, ":")[0]
-	// fmt.Println(id)
 
 	id = strings.Split(id, " ")[1]
-	// fmt.Println(id)
 
 	intId, _ := strconv.Atoi(id)
 	return intId
@@ -31,12 +29,8 @@ func IsGamePossible(s string) bool {
 		sets := strings.Split(r, ",")
 		for _, s := range sets {
 			s = strings.TrimSpace(s)
-			// fmt.Println("set:", s)
 			colour := strings.Split(s, " ")[1]
 			count, _ := strconv.Atoi(strings.Split(s, " ")[0])
-
-			// fmt.Println(i, "colour", colour)
-			// fmt.Println(i, "count", count)
 
 			if colour == "blue" {
 				if count > max_blue {
@@ -65,14 +59,10 @@ func GetColourMax(s string) (blue int, red int, green int) {
 
 	for _, r := range rounds {
 		sets := strings.Split(r, ",")
-		for i, s := range sets {
+		for _, s := range sets {
 			s = strings.TrimSpace(s)
-			fmt.Println("set:", s)
 			colour := strings.Split(s, " ")[1]
 			count, _ := strconv.Atoi(strings.Split(s, " ")[0])
-
-			fmt.Println(i, "colour", colour)
-			fmt.Println(i, "count", count)
 
 			if colour == "blue" && count > blue {
 				blue = count
@@ -99,12 +89,10 @@ func Part1() {
 	}
 
 	var sum int
-	for i, s := range lines {
+	for _, s := range lines {
 		id := GetGameId(s)
-		fmt.Println(i, ": ", s)
 
 		if IsGamePossible(s) {
-			fmt.Println("  Possible")
 			sum += id
 		}
 	}

@@ -51,16 +51,13 @@ func stringToInt(s string) (int, error) {
 }
 
 func findFirst(s string) int {
-	// fmt.Println("findFirst", s)
 	content := []byte(s)
 	// this won't work, as the there are no regex libraries that support the query in NumberMatch
 	re := regexp.MustCompile(NumberMatch)
 	idx := re.FindAllIndex(content, -1)
-	// fmt.Println(idx)
 	first := idx[0]
 
 	r := s[first[0]:first[1]]
-	// fmt.Println(r)
 
 	i, err := stringToInt(r)
 	if err != nil {
@@ -70,12 +67,10 @@ func findFirst(s string) int {
 }
 
 func findLast(s string) int {
-	fmt.Println("findLast", s)
 	content := []byte(s)
 	re := regexp.MustCompile(NumberMatch)
 	idx := re.FindAllIndex(content, -1)
 	last := idx[len(idx)-1]
-	fmt.Println(idx)
 
 	r := s[last[0]:last[1]]
 
@@ -97,7 +92,6 @@ func extractCalibrationValuePart1(raw string) int {
 	value := getNumbers(raw)
 
 	result := value[0:1] + value[len(value)-1:]
-	// fmt.Println(raw, result)
 	i, err := strconv.Atoi(result)
 	if err != nil {
 		panic(err)
