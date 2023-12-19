@@ -4,6 +4,7 @@ import (
 	"aoc2023/src/day1"
 	"aoc2023/src/day2"
 	"aoc2023/src/day3"
+	"aoc2023/src/day4"
 	"flag"
 	"fmt"
 )
@@ -34,6 +35,12 @@ func main() {
 			day3.Part1()
 		} else {
 			day3.Part2()
+		}
+	} else if *dayPtr == 4 {
+		if *partPtr == 1 {
+			day4.Part1()
+		} else {
+			day4.Part2()
 		}
 	}
 }
