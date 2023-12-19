@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
+	"strings"
 )
 
 const testDataFile = "data/day_%d_%d.txt"
@@ -59,4 +61,12 @@ func RemoveDuplicateInt(intSlice []int) []int {
 		}
 	}
 	return list
+}
+
+func StringToIntArray(nums string) (arr []int) {
+	for _, num := range strings.Split(nums, " ") {
+		n, _ := strconv.Atoi(num)
+		arr = append(arr, n)
+	}
+	return arr
 }
