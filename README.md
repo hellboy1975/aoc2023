@@ -48,9 +48,9 @@ go test ./...
 
 ### Day 1
 
-Part 1 was relatively straight forward.
+**Part 1** was relatively straight forward.
 
-Part 2 was significantly harder.  Initial approach of just a string replacement of the number words failed, as some of the data contained overlapping numbers.
+**Part 2** was significantly harder.  Initial approach of just a string replacement of the number words failed, as some of the data contained overlapping numbers.
 For example: `1twoxyzoneeight`
 
 I came up with a second approach that used a fancy regex using a look ahead:
@@ -66,16 +66,20 @@ I have decided refactoring this (again) isn't worth the effort.
 
 Mostly just an exercise in parsing.  In a language I'd be more comfortable with I'd have done this a little more quickly.  Spent more time working on the tests than actual solutions.
 
-With Part 2 I was lucky that I'd developed a solution that was complimentary to the answer, rather than having to do a reworking.
+With **Part 2** I was lucky that I'd developed a solution that was complimentary to the answer, rather than having to do a reworking.
 
 ### Day 3
 
-For Day 2 the Part 1 solution wasn't especially hard to design, but took me a while writing the appropriate code in Go. 
+For Day 2 the **Part 1** solution wasn't especially hard to design, but took me a while writing the appropriate code in Go. 
 I spent more time with test writing this time around than in the other days.
 
-Part 2 was relatively easy to understand, but challenging to write an algorithm for that doesn't just scan and rescan data.
-I couldn't think of a clever approach, so that's basically what I did.  I tried to minimise the amount of scanning by rendering the chunks
-as a 2D array of ints.
+**Part 2** was relatively easy to understand, but challenging to write an algorithm for that doesn't just scan and rescan data.  I couldn't think of a clever approach, so that's basically what I did.  I tried to minimise the amount of scanning by rendering the chunks as a 2D array of ints.
+
+### Day 4
+
+**Part 1** is probably the easiest challenge thus far - really just intersect a couple of arrays and multiply stuff.  Relatively easy to test for as well.
+
+I'm used to using a built in array intersect function like PHP has.  Go doesn't have such a thing, but there's a handy package I borrowed here: https://github.com/juliangruber/go-intersect/tree/master
 
 ## References
 
