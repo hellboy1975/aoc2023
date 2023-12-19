@@ -4,6 +4,7 @@ import (
 	"aoc2023/src/base"
 	"fmt"
 	"math"
+	"strings"
 
 	"github.com/juliangruber/go-intersect"
 )
@@ -32,9 +33,10 @@ func parseLine(line string) card {
 	var card card
 
 	// disregard everything prior to :
-	// nums := strings.Split(line, ":")[1]
-	// w := strings.Split(nums, "|")[0]
-	// n := strings.Split(nums, "|")[1]
+	nums := strings.Split(line, ":")[1]
+
+	card.winners = base.StringToIntArray(strings.Split(nums, "|")[0])
+	card.numbers = base.StringToIntArray(strings.Split(nums, "|")[1])
 
 	return card
 }
@@ -49,14 +51,18 @@ func Part1() {
 		panic(err)
 	}
 
-	for n, line := range lines {
+	for _, line := range lines {
+		linecount++
 		card := parseLine(line)
-		fmt.Println(n, "card:", card)
+
+		points := calcPoints(calcWinners(card))
+
+		sum += points
 	}
 
 	fmt.Println("Day 4, Part 1: Scratchcards")
 	fmt.Println("Lines processed", linecount)
-	fmt.Println("Sum of adjacent chunks", sum)
+	fmt.Println("Sum of winning points", sum)
 }
 
 func Part2() {

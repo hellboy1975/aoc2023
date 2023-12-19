@@ -63,7 +63,10 @@ func RemoveDuplicateInt(intSlice []int) []int {
 	return list
 }
 
+// takes a string of space separated numbers, and converts this to an array of ints
 func StringToIntArray(nums string) (arr []int) {
+	nums = strings.TrimSpace(nums)             // remove trailing and leading whitespace
+	nums = strings.ReplaceAll(nums, "  ", " ") // remove double spaces
 	for _, num := range strings.Split(nums, " ") {
 		n, _ := strconv.Atoi(num)
 		arr = append(arr, n)
