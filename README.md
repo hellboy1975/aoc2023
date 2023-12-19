@@ -8,6 +8,8 @@ My approach for this year:
 * Use TDD
 
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/hellboy1975/aoc2023/.github%2Fworkflows%2Fgo.yml)
+![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/hellboy1975/aoc2023)
+
 
 ## Usage
 
@@ -16,19 +18,19 @@ Clone this repo to your file system directory of choice, and make sure you have 
 Build the project with:
 
 ```
-go build
+go build -o ./bin
 ```
 
 Run a specific day with a command like:
 
 ```
-./aoc2023 -day=1 -part=1
+./bin/aoc2023 -day=1 -part=1
 ```
 
 For limited help:
 
 ```
-./aoc2023 -h
+./bin/aoc2023 -h
 Usage of ./aoc2023:
   -day int
         which day to run (default 1)
@@ -68,8 +70,12 @@ With Part 2 I was lucky that I'd developed a solution that was complimentary to 
 
 ### Day 3
 
-For Day 2 the Part 1 solution wasn't especially hard to design, but took me a whil writing the appropriate code in Go. 
+For Day 2 the Part 1 solution wasn't especially hard to design, but took me a while writing the appropriate code in Go. 
 I spent more time with test writing this time around than in the other days.
+
+Part 2 was relatively easy to understand, but challenging to write an algorithm for that doesn't just scan and rescan data.
+I couldn't think of a clever approach, so that's basically what I did.  I tried to minimise the amount of scanning by rendering the chunks
+as a 2D array of ints.
 
 ## References
 

@@ -169,8 +169,8 @@ func TestTwoDigitCoord(t *testing.T) {
 }
 
 func TestCharType(t *testing.T) {
-	types := []rune(".3*")
-	want := []int{CharBlank, CharNum, CharSymbol}
+	types := []rune(".3*#")
+	want := []int{CharBlank, CharNum, CharGear, CharSymbol}
 
 	for i, r := range types {
 		got := CharType(r)

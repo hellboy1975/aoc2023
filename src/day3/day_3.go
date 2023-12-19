@@ -2,6 +2,7 @@ package day3
 
 import (
 	"aoc2023/src/base"
+	"errors"
 	"fmt"
 	"regexp"
 	"slices"
@@ -12,10 +13,10 @@ import (
 const CharNum = 1
 const CharSymbol = 2
 const CharBlank = 3
+const CharGear = 4
 
 const DataExtent = 139 // 140 columns/rows in the data provided
 
-// const NumRegex = "([0-9])\\w+"
 const NumRegex = "\\d+"
 
 type coord struct {
@@ -24,10 +25,13 @@ type coord struct {
 }
 
 var symbols [][]bool
+var gears [][]bool
 
 // returns 1 for number, 2 for symbol and 3 for .
 func CharType(c rune) int {
-	if c == '.' {
+	if c == '*' {
+		return CharGear
+	} else if c == '.' {
 		return CharBlank
 	} else if unicode.IsNumber(c) {
 		return CharNum
@@ -50,7 +54,9 @@ func Symbols(lines []string) [][]bool {
 	for y, line := range lines {
 		sline := make([]bool, 140)
 		for x, cell := range line {
-			if CharType(rune(cell)) == CharSymbol {
+			// Gears and other symbols are different
+			celltype := CharType(rune(cell))
+			if celltype == CharSymbol || celltype == CharGear {
 				sline[x] = true
 			} else {
 				sline[x] = false
@@ -59,6 +65,66 @@ func Symbols(lines []string) [][]bool {
 		symbols[y] = sline
 	}
 	return symbols
+}
+
+// Creates a 2D array of boolean values indicating if a x,y coordinate is a symbol
+func Gears(lines []string) [][]bool {
+	symbols := make([][]bool, 140)
+
+	for y, line := range lines {
+		sline := make([]bool, 140)
+		for x, cell := range line {
+			if CharType(rune(cell)) == CharGear {
+				sline[x] = true
+			} else {
+				sline[x] = false
+			}
+		}
+		symbols[y] = sline
+	}
+	return symbols
+}
+
+// returns the integer value of the chunk located on the passed cell
+func GetChunkValue(cell int, chunks [][]int, line string) (int, error) {
+	for _, chunk := range chunks {
+		if cell >= chunk[0] && cell < chunk[1] {
+			// get the whole number
+			r, _ := strconv.Atoi(line[chunk[0]:chunk[1]])
+			return r, nil
+		}
+	}
+	return -1, errors.New("no chunk match")
+}
+
+// iterates over the file, building a 2D array in which each element contains either 0 or the number of the chunk
+func Chunks(lines []string) [][]int {
+	var linecount int
+
+	data := make([][]int, 140)
+
+	for l, line := range lines {
+		// fmt.Println(line)
+		row := make([]int, 140)
+		linecount++
+		chunks := LineNumberChunks(line)
+
+		for x, cell := range line {
+			// fmt.Println(l, x, cell)
+			if unicode.IsDigit(cell) {
+				// if it's a number, then find the matching chunk
+				c, err := GetChunkValue(x, chunks, line)
+				if err != nil {
+					panic(err)
+				}
+				row[x] = c
+			} else {
+				row[x] = -1
+			}
+		}
+		data[l] = row
+	}
+	return data
 }
 
 func Ycoord(chunk []int, line int) (ycoord coord) {
@@ -124,9 +190,8 @@ func IsChunkNextToSymbol(x coord, y coord) bool {
 }
 
 // Visualises the symbols
-func PrintSymbols() {
-	fmt.Println("Symbols grid:")
-	for _, line := range symbols {
+func PrintGrid(grid [][]bool) {
+	for _, line := range grid {
 		fmt.Print("|")
 		for _, s := range line {
 			if s {
@@ -138,6 +203,37 @@ func PrintSymbols() {
 		}
 		fmt.Println("|")
 	}
+}
+
+// takes a coordinate, works out how many ratios are around it and returns their product
+func GetRatio(gear coord, chunks [][]int) int {
+	var ratios []int
+	var total int
+
+	for y := gear.y - 1; y <= gear.y+1; y++ {
+		for x := gear.x - 1; x <= gear.x+1; x++ {
+			if chunks[y][x] != -1 {
+				ratios = append(ratios, chunks[y][x])
+			}
+		}
+	}
+	// remove duplicates
+	ratios = base.RemoveDuplicateInt(ratios)
+
+	// if there's only one ratio then we can disregard this
+	if len(ratios) <= 1 {
+		return 0
+	}
+
+	// multiply the remaining values in the array together
+	for _, ratio := range ratios {
+		if total == 0 {
+			total = ratio
+		} else {
+			total *= ratio
+		}
+	}
+	return total
 }
 
 // Day 3, Part 1 of the AoC2023 challenge
@@ -153,7 +249,7 @@ func Part1() {
 
 	symbols = Symbols(lines)
 
-	PrintSymbols()
+	PrintGrid(symbols)
 
 	var sum, count, linecount int
 
@@ -177,5 +273,43 @@ func Part1() {
 
 // Day 3, Part 2 of the AoC2023 challenge
 func Part2() {
+	var linecount, sum, grcount int
+	var gear coord
 	fmt.Println("Day 3, Part 2: Gear Ratios")
+
+	file := base.GetDayDataFile(3, 1)
+
+	lines, err := base.ReadLines(file)
+	if err != nil {
+		panic(err)
+	}
+
+	// a 2d array of booleans which indicate where the gears are
+	gears = Gears(lines)
+
+	PrintGrid(gears)
+
+	// a 2d array of ints which contain either the number of the chunk or -1 (indicating no value or a symbol)
+	chunks := Chunks(lines)
+
+	// iterate through the gears, and then get the adjacent chunk values
+	for y, line := range gears {
+		linecount++
+		for x, pos := range line {
+			if pos {
+				gear.x = x
+				gear.y = y
+
+				gr := GetRatio(gear, chunks)
+				if gr > 0 {
+					grcount++
+					sum += gr
+				}
+			}
+		}
+
+	}
+
+	fmt.Println("Gear ratios analysed:", grcount)
+	fmt.Println("Sum of gear ratios:", sum)
 }

@@ -20,4 +20,14 @@
 # Go workspace file
 go.work
 
+# ignore any aoc2023 data copied to this directory
 data/
+
+# ignore binaries
+bin/
+
+# ignore any playground code I stick in this folder
+play/
+
+# vscode debug file
+launch.json
