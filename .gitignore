@@ -28,3 +28,6 @@ bin/
 
 # ignore any playground code I stick in this folder
 play/
+
+# vscode debug file
+launch.json
