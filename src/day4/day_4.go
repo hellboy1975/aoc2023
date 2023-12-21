@@ -10,13 +10,16 @@ import (
 )
 
 type card struct {
-	id      int
-	winners []int
-	numbers []int
-	wins    int
+	id        int
+	winners   []int
+	numbers   []int
+	wins      int
+	collected int
 }
 
 var cards []card
+
+var loopcount int
 
 // Uses exponention base 2 function to determine the number of points the winners get
 func calcPoints(winners int) int {
@@ -26,39 +29,38 @@ func calcPoints(winners int) int {
 	return int(math.Exp2(float64(winners - 1)))
 }
 
+// compares the number and winner arrays and returns the number of matching values
 func calcWinners(card card) int {
 	return len(intersect.Simple(card.winners, card.numbers))
 }
 
-// func calcCardWins(card card) int {
-// 	var wins int
+// takes a look at the passed card, and based on how many are collected (always at least one) it then adds extra cards
+func calcCardCollection(card card) {
+	cardcount := len(cards)
 
-// 	if card.id == len(cards) {
-// 		return 0
-// 	}
+	// you always have at least the original card
+	cards[card.id-1].collected += 1
 
-// 	fmt.Println("card process:", card.id, card.wins, "len", len(cards))
+	fmt.Println("Processing:", card.id, "collected", cards[card.id-1].collected)
 
-// 	wins = card.wins
+	// if there are no winners no further processing is required
+	if card.wins > 0 {
+		// for each card collected
+		for c := 0; c < cards[card.id-1].collected; c++ {
+			loopcount++
 
-// 	fmt.Print("For Card ", card.id, " loop ")
-// 	for i := card.id; i <= card.wins+card.id-1; i++ {
-// 		fmt.Print(" [", i, "]")
-// 		wins += calcCardWins(cards[i])
-// 	}
-// 	fmt.Println()
-// 	fmt.Println("card wins:", card.id, wins)
-// 	return wins
-// }
+			// process cards for each winning card
+			for i := card.id; i < card.id+card.wins; i++ {
+				loopcount++
+				if i >= cardcount {
+					break
+				}
 
-func calcCardWins(card card) int {
-	wins := card.wins
-
-	fmt.Println("Parent card", card.id)
-	for i := card.id; i < card.id+card.wins; i++ {
-		fmt.Println("Iterate card", i)
+				cards[i].collected += 1
+			}
+		}
 	}
-	return wins
+
 }
 
 // Converts a string into a card type
@@ -113,6 +115,7 @@ func Part2() {
 	// first pass will setup the cards array
 	for _, line := range lines {
 		linecount++
+		loopcount++
 		card := parseLine(line)
 		card.wins = calcWinners(card)
 		card.id = linecount
@@ -120,20 +123,20 @@ func Part2() {
 		cards = append(cards, card)
 	}
 
-	for i, card := range cards {
-		fmt.Println("card:", card.id, "----------------------------")
-		won := calcCardWins(card)
-		fmt.Println("card:", card.id, card.wins, "won:", won)
-
-		if i > 10 {
-			break
-		}
-		sum += won
+	// second pass will count how many cards are won
+	for _, card := range cards {
+		loopcount++
+		calcCardCollection(card)
 	}
 
-	// second pass with traverse the cards, and work out how many winners each one collects
+	// third pass adds them altogether
+	for _, card := range cards {
+		loopcount++
+		sum += card.collected
+	}
 
 	fmt.Println("Day 4, Part 2: Scratchcards")
 	fmt.Println("Lines processed", linecount)
+	fmt.Println("Loops ran", loopcount)
 	fmt.Println("Number of cards won:", sum)
 }
