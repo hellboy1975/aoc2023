@@ -81,6 +81,8 @@ I spent more time with test writing this time around than in the other days.
 
 I'm used to using a built in array intersect function like PHP has.  Go doesn't have such a thing, but there's a handy package I borrowed here: https://github.com/juliangruber/go-intersect/tree/master
 
+**Part 2** was easy in my head, as I was going to use a form of recursion to solve the issue.  I had problems nailing this, so took a plan B approach which resembled the walkthrough of the example on the AOC2023 website.
+
 ## References
 
 Below is a list of sites/resources that have been useful in these challenges:
