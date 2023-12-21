@@ -10,9 +10,16 @@ import (
 )
 
 type card struct {
-	winners []int
-	numbers []int
+	id        int
+	winners   []int
+	numbers   []int
+	wins      int
+	collected int
 }
+
+var cards []card
+
+var loopcount int
 
 // Uses exponention base 2 function to determine the number of points the winners get
 func calcPoints(winners int) int {
@@ -22,8 +29,38 @@ func calcPoints(winners int) int {
 	return int(math.Exp2(float64(winners - 1)))
 }
 
+// compares the number and winner arrays and returns the number of matching values
 func calcWinners(card card) int {
 	return len(intersect.Simple(card.winners, card.numbers))
+}
+
+// takes a look at the passed card, and based on how many are collected (always at least one) it then adds extra cards
+func calcCardCollection(card card) {
+	cardcount := len(cards)
+
+	// you always have at least the original card
+	cards[card.id-1].collected += 1
+
+	fmt.Println("Processing:", card.id, "collected", cards[card.id-1].collected)
+
+	// if there are no winners no further processing is required
+	if card.wins > 0 {
+		// for each card collected
+		for c := 0; c < cards[card.id-1].collected; c++ {
+			loopcount++
+
+			// process cards for each winning card
+			for i := card.id; i < card.id+card.wins; i++ {
+				loopcount++
+				if i >= cardcount {
+					break
+				}
+
+				cards[i].collected += 1
+			}
+		}
+	}
+
 }
 
 // Converts a string into a card type
@@ -67,7 +104,39 @@ func Part1() {
 
 func Part2() {
 	var linecount, sum int
+
+	file := base.GetDayDataFile(4, 1)
+
+	lines, err := base.ReadLines(file)
+	if err != nil {
+		panic(err)
+	}
+
+	// first pass will setup the cards array
+	for _, line := range lines {
+		linecount++
+		loopcount++
+		card := parseLine(line)
+		card.wins = calcWinners(card)
+		card.id = linecount
+
+		cards = append(cards, card)
+	}
+
+	// second pass will count how many cards are won
+	for _, card := range cards {
+		loopcount++
+		calcCardCollection(card)
+	}
+
+	// third pass adds them altogether
+	for _, card := range cards {
+		loopcount++
+		sum += card.collected
+	}
+
 	fmt.Println("Day 4, Part 2: Scratchcards")
 	fmt.Println("Lines processed", linecount)
-	fmt.Println("Sum of adjacent chunks", sum)
+	fmt.Println("Loops ran", loopcount)
+	fmt.Println("Number of cards won:", sum)
 }

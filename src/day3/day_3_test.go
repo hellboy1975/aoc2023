@@ -143,7 +143,6 @@ func TestYcoordLastCol(t *testing.T) {
 
 func TestTwoDigitCoord(t *testing.T) {
 	var wantx, wanty coord
-	// TODO: work out what these nums are
 	wantx.x = 46
 	wantx.y = 2
 	wanty.x = 50
