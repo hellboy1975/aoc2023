@@ -10,10 +10,10 @@ import (
 	"strings"
 )
 
-const testDataFile = "data/day_%d_%d.txt"
+const testDataFile = "data/day_%s_%s.txt"
 
 // gets the data file for the requested day and part
-func GetDayDataFile(day, part int) string {
+func GetDayDataFile(day, part string) string {
 	file := fmt.Sprintf(testDataFile, day, part)
 	fmt.Println("  Data file: " + file)
 
