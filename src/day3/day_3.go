@@ -240,7 +240,7 @@ func GetRatio(gear coord, chunks [][]int) int {
 func Part1() {
 	fmt.Println("Day 3, Part 1: Gear Ratios")
 
-	file := base.GetDayDataFile(3, 1)
+	file := base.GetDayDataFile("3", "1")
 
 	lines, err := base.ReadLines(file)
 	if err != nil {
@@ -277,7 +277,7 @@ func Part2() {
 	var gear coord
 	fmt.Println("Day 3, Part 2: Gear Ratios")
 
-	file := base.GetDayDataFile(3, 1)
+	file := base.GetDayDataFile("3", "1")
 
 	lines, err := base.ReadLines(file)
 	if err != nil {

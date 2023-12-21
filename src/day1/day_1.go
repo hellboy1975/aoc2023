@@ -112,7 +112,7 @@ func extractCalibrationValuePart2(raw string) int {
 func Part1() {
 	fmt.Println("Day 1, Part 1: Trebuchet?!")
 
-	file := base.GetDayDataFile(1, 1)
+	file := base.GetDayDataFile("1", "1")
 
 	lines, err := base.ReadLines(file)
 	if err != nil {

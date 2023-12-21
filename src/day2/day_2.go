@@ -81,7 +81,7 @@ func GetColourMax(s string) (blue int, red int, green int) {
 func Part1() {
 	fmt.Println("Day 2, Part 1: Cube Conundrum")
 
-	file := base.GetDayDataFile(2, 1)
+	file := base.GetDayDataFile("2", "1")
 
 	lines, err := base.ReadLines(file)
 	if err != nil {
@@ -103,7 +103,7 @@ func Part1() {
 func Part2() {
 	fmt.Println("Day 2, Part 2: Cube Conundrum")
 
-	file := base.GetDayDataFile(2, 1)
+	file := base.GetDayDataFile("2", "1")
 
 	lines, err := base.ReadLines(file)
 	if err != nil {

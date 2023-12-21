@@ -81,7 +81,7 @@ func parseLine(line string) card {
 func Part1() {
 	var linecount, sum int
 
-	file := base.GetDayDataFile(4, 1)
+	file := base.GetDayDataFile("4", "1")
 
 	lines, err := base.ReadLines(file)
 	if err != nil {
@@ -105,7 +105,7 @@ func Part1() {
 func Part2() {
 	var linecount, sum int
 
-	file := base.GetDayDataFile(4, 1)
+	file := base.GetDayDataFile("4", "1")
 
 	lines, err := base.ReadLines(file)
 	if err != nil {
