@@ -8,6 +8,27 @@ import (
 func init() {
 }
 
+func TestGetDayDataFile(t *testing.T) {
+	cases := []struct {
+		Description string
+		Day         string
+		Part        string
+		Want        string
+	}{
+		{"Full data", "1", "1", "data/day_1_1.txt"},
+		{"Example data", "1", "ex", "data/day_1_ex.txt"},
+	}
+
+	for _, test := range cases {
+		t.Run(test.Description, func(t *testing.T) {
+			got := GetDayDataFile(test.Day, test.Part)
+			if got != test.Want {
+				t.Errorf("got %s, want %s", got, test.Want)
+			}
+		})
+	}
+}
+
 func TestRemoveDuplicateInt(t *testing.T) {
 
 	cases := []struct {
