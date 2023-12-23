@@ -8,6 +8,11 @@ import (
 
 var file string
 
+type mapRange struct {
+	low  int
+	high int
+}
+
 func init() {
 	file = base.GetDayDataFile("5", "1")
 }
